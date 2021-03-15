@@ -37,6 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # These below are imported from
+    # https://django-allauth.readthedocs.io/en/latest/installation.html
+
+    # The contrib.sites app and the site _id setting we added Are used by
+    # the social account app to create the proper callback URLs
+    #  when connecting via social media accounts
+    'django.contrib.sites',
+    # This below is allauth itself
+    'allauth',
+    # This below allows the user to login with username and password
+    'allauth.account',
+    # This allows the user to login by social media accounts
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +72,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                # required by allauth jimmy, it allows allauth-django
+                # to access HTTP request object in our templates.
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -66,6 +81,50 @@ TEMPLATES = [
         },
     },
 ]
+
+# These below are imported from
+# https://django-allauth.readthedocs.io/en/latest/installation.html
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`.
+    # Allauth doesn't handle the superuser login so the function
+    # gets deferred to django with this BACKEND function
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail.
+    # Allows users to login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+# Since by default allauth will send confirmation emails to any new accounts
+# we need to temporarily log those emails to the console so we can get
+# the confirmation links.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+"""
+The group of variables below is pasted from here
+https://github.com/ckz8780/boutique_ado_v1/blob/ea7fe2688a0d97db4e469b672d5cb35e5835ff69/boutique_ado/settings.py
+
+"""
+# The account authentication method is what tells allauth that we want to allow
+# authentication using either usernames or emails.
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+# These three email settings below make it so that
+# an email is required to register for the site,
+# verifying your email is mandatory so we know users are using a real email,
+# and they're gonna be required to enter their email twice
+#  on the registration pageto make sure that they haven't made any typos.
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+# Minimum username length of 4 characters
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+# specifying a login url to redirect after logging in,
+# so this operation uses 2 variables, one for the login
+# and one for the redirection to that login
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
