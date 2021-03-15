@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # create a path called accounts and use it to include all the allauth.urls
     path('accounts/', include('allauth.urls')),
+    # urls della nostra cartelle 'home', contenente il nostro sito
+    path('', include('home.urls')),
 ]

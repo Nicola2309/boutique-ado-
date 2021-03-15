@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,8 @@ INSTALLED_APPS = [
     'allauth.account',
     # This allows the user to login by social media accounts
     'allauth.socialaccount',
+    # che conterra' il nostro sito 
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -67,7 +70,11 @@ ROOT_URLCONF = 'boutique_ado.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # We wire up the app directories
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,7 +131,7 @@ ACCOUNT_USERNAME_MIN_LENGTH = 4
 # so this operation uses 2 variables, one for the login
 # and one for the redirection to that login
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/success'
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
